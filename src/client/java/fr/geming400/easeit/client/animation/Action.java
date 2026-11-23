@@ -4,26 +4,27 @@ import fr.geming400.easeit.client.animation.easing.BaseEasing;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import org.jetbrains.annotations.Range;
 import org.joml.Vector2i;
+import org.joml.Vector2ic;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Represents an action executable by an {@link Animation}.
  * <p>
- * To store states used in actions, use {@linkplain AtomicReference atomic references} <i>(ex: {@link #createMove(Vector2i)})</i>
+ * To store states used in actions, use {@linkplain AtomicReference atomic references} <i>(ex: {@link #createMove(Vector2ic)})</i>
  */
 @FunctionalInterface
 public interface Action<T extends Number> {
-    static Action<Integer> createMove(Vector2i to) {
-        AtomicReference<Vector2i> originalWidgetPos = new AtomicReference<>();
+    static Action<Integer> createMove(Vector2ic to) {
+        AtomicReference<Vector2ic> originalWidgetPos = new AtomicReference<>();
         return (widget, animation, easing, progress) -> {
             if (originalWidgetPos.get() == null)
                 originalWidgetPos.set(new Vector2i(widget.getX(), widget.getY()));
 
-            Vector2i offset = new Vector2i(to.x - originalWidgetPos.get().x, to.y - originalWidgetPos.get().y);
+            Vector2i offset = new Vector2i(to.x() - originalWidgetPos.get().x(), to.y() - originalWidgetPos.get().y());
             Vector2i pos = new Vector2i(
-                    easing.get(progress, originalWidgetPos.get().x, offset.x),
-                    easing.get(progress, originalWidgetPos.get().y, offset.y)
+                    easing.get(progress, originalWidgetPos.get().x(), offset.x),
+                    easing.get(progress, originalWidgetPos.get().y(), offset.y)
             );
 
             widget.setPosition(pos.x, pos.y);
