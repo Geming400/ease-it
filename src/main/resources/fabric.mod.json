@@ -1,0 +1,39 @@
+{
+	"schemaVersion": 1,
+	"id": "ease-it",
+	"version": "${version}",
+	"name": "Waiter, ease it please !",
+	"description": "API to easily apply easings to widgets.",
+	"authors": [
+		"Geming400"
+	],
+	"contact": {
+		"homepage": "https://github.com/Geming400/ease-it",
+		"sources": "https://github.com/Geming400/ease-it",
+		"issues": "https://github.com/Geming400/ease-it/issues"
+	},
+	"license": "Unlicense",
+	"icon": "assets/ease-it/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"fr.geming400.easeit.WaiterEaseItPlease"
+		],
+		"client": [
+			"fr.geming400.easeit.client.WaiterEaseItPleaseClient"
+		]
+	},
+	"mixins": [
+		"ease-it.mixins.json",
+		{
+			"config": "ease-it.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
