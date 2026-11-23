@@ -71,6 +71,26 @@ publishing {
 		create("mavenJava", MavenPublication) {
 			from components.java
 		}
+
+		maven(MavenPublication) {
+			pom {
+				name = "easeit"
+				description = "API to easily apply easings to widgets."
+
+				developers {
+					developer {
+						id = "geming400"
+						name = "Geming400"
+					}
+				}
+			}
+
+			groupId = 'fr.geming400.easeit'
+			artifactId = 'easeit'
+			version = project.version
+
+			from components.java
+		}
 	}
 
 	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
