@@ -14,17 +14,14 @@
 	},
 	"license": "Unlicense",
 	"icon": "assets/ease-it/icon.png",
-	"environment": "*",
+	"environment": "client",
+	"accessWidener": "easeit.classtweaker",
 	"entrypoints": {
-		"main": [
-			"fr.geming400.easeit.WaiterEaseItPlease"
-		],
 		"client": [
 			"fr.geming400.easeit.client.WaiterEaseItPleaseClient"
 		]
 	},
 	"mixins": [
-		"ease-it.mixins.json",
 		{
 			"config": "ease-it.client.mixins.json",
 			"environment": "client"
