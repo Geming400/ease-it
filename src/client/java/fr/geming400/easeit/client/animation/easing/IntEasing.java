@@ -48,15 +48,15 @@ public class IntEasing extends WrappedEasing<Integer, Double, Easing> {
 
     @Override
     public Integer in(@Range(from = 0, to = 1) double x, Integer min, Integer max) {
-        return easing.in(x, min.doubleValue(), max.doubleValue()).intValue();
+        return (int) Math.round(this.easing.in(x, min.doubleValue(), max.doubleValue()));
     }
     @Override
     public Integer out(@Range(from = 0, to = 1) double x, Integer min, Integer max) {
-        return easing.out(x, min.doubleValue(), max.doubleValue()).intValue();
+        return (int) Math.round(this.easing.out(x, min.doubleValue(), max.doubleValue()));
     }
     @Override
     public Integer inOut(@Range(from = 0, to = 1) double x, Integer min, Integer max) {
-        return easing.inOut(x, min.doubleValue(), max.doubleValue()).intValue();
+        return (int) Math.round(this.easing.inOut(x, min.doubleValue(), max.doubleValue()));
     }
 
     @Override
