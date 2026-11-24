@@ -176,14 +176,14 @@ public interface Easing extends BaseEasing<Double> {
     @Override
     default Double out(@Range(from = 0, to = 1) double x, Double min, Double max) {
         if (min == 0)
-            return this.in(x) * Math.max(min, max);
+            return this.out(x) * Math.max(min, max);
 
         return this.out(x) * Math.max(min, max) + Math.min(min, max);
     }
     @Override
     default Double inOut(@Range(from = 0, to = 1) double x, Double min, Double max) {
         if (min == 0)
-            return this.in(x) * Math.max(min, max);
+            return this.inOut(x) * Math.max(min, max);
 
         return this.inOut(x) * Math.max(min, max) + Math.min(min, max);
     }
