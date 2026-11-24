@@ -94,7 +94,13 @@ Actions have a generic type, `T`. This type is the same as the `Animation` class
 
 To make your own "actions", you need to implement the `Action` functional interface.
 This action executes each time the animation ticks and is what lets you modify a widget
-depending on the easing:
+depending on the easing.
+
+To get the current progress of the easing, call `easing.get(progress)`, you can additionally specify a min and max argument.
+By default the min and max arguments are:
+- on `FloatEasing`: min = `0f`, max = `1f`
+- on `DoubleEasing`: min = `0d`, max = `1d`
+- on `IntEasing`: min = `0`, max = `100`
 
 ---
 
