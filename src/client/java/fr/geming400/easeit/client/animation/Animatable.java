@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+// TODO: Allow for multiple animations to play at once
+
 /**
  * An {@link Animatable} {@link Widget} can be "animated" using the {@link Easing} system and {@linkplain Action actions}.
  * To animate a widget use {@link #easeit$addAnimation(Animation)},
