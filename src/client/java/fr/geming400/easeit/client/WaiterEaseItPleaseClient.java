@@ -43,6 +43,7 @@ public class WaiterEaseItPleaseClient implements ClientModInitializer {
 			"Also try Minecraft !",
 			"Made in France",
 			"LOGGER.info(Util.getRandom(COOL_QUOTES, Random.create()));",
+			"I'm easing it",
 			// Me when the shameful self promotion
 			"Also try Mineciv !",
 			"Also try Pesticides !",
