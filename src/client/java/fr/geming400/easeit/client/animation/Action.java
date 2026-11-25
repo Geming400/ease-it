@@ -21,13 +21,10 @@ public interface Action<T extends Number> {
             if (originalWidgetPos.get() == null)
                 originalWidgetPos.set(new Vector2i(widget.getX(), widget.getY()));
 
-            Vector2i offset = new Vector2i(to.x() - originalWidgetPos.get().x(), to.y() - originalWidgetPos.get().y());
-            Vector2i pos = new Vector2i(
-                    easing.get(progress, originalWidgetPos.get().x(), offset.x),
-                    easing.get(progress, originalWidgetPos.get().y(), offset.y)
+            widget.setPosition(
+                    easing.get(progress, originalWidgetPos.get().x(), to.x()),
+                    easing.get(progress, originalWidgetPos.get().y(), to.y())
             );
-
-            widget.setPosition(pos.x, pos.y);
 
             if (animation.isFinished())
                 originalWidgetPos.set(null);
