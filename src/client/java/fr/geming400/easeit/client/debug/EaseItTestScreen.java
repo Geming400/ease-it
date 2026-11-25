@@ -13,6 +13,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.util.Window;
 import net.minecraft.text.Text;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.random.Random;
 import org.jetbrains.annotations.Nullable;
@@ -54,6 +55,29 @@ public class EaseItTestScreen extends Screen {
                     Easing.EXPONENTIAL, EasingType.OUT,
                     20 * 5,
                     Action.createMove(endPos)
+            ));
+        });
+
+        registerTest("Relative Move Test", screen -> {
+            AlphaMultilineTextWidget testWidget = screen.testWidget;
+
+            Vector2i relativeEndPos = Util.getRandom(
+                    List.of(
+                            new Vector2i(0, testWidget.getHeight()), new Vector2i(0, -testWidget.getHeight()),
+                            new Vector2i(testWidget.getWidth(), 0), new Vector2i(-testWidget.getWidth(), 0)
+                    ),
+                    RANDOM
+            );
+
+            Vector2i absoluteEndPos = new Vector2i(testWidget.getX(), testWidget.getY()).add(relativeEndPos);
+            screen.startBorder = Border.fromWidget(testWidget, START_BORDER_COLOR, START_BORDER_NAME);
+            screen.endBorder = new Border(absoluteEndPos.x, absoluteEndPos.y, testWidget.getWidth(), testWidget.getHeight(), END_BORDER_COLOR, END_BORDER_NAME);
+
+            return testWidget.easeit$addAnimation(Animation.ofInt(
+                    testWidget,
+                    Easing.EXPONENTIAL, EasingType.OUT,
+                    20 * 5,
+                    Action.createRelativeMove(relativeEndPos)
             ));
         });
 

@@ -1,6 +1,7 @@
 package fr.geming400.easeit.client.animation;
 
 import fr.geming400.easeit.client.animation.easing.BaseEasing;
+import fr.geming400.easeit.client.mixin.ClickableWidgetAccessor;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import org.jetbrains.annotations.Range;
 import org.joml.Vector2i;
@@ -24,6 +25,24 @@ public interface Action<T extends Number> {
             widget.setPosition(
                     easing.get(progress, originalWidgetPos.get().x(), to.x()),
                     easing.get(progress, originalWidgetPos.get().y(), to.y())
+            );
+
+            if (animation.isFinished())
+                originalWidgetPos.set(null);
+        };
+    }
+
+    static Action<Integer> createRelativeMove(Vector2ic relativeEndPos) {
+        AtomicReference<Vector2ic> originalWidgetPos = new AtomicReference<>();
+        return (widget, animation, easing, progress) -> {
+            if (originalWidgetPos.get() == null)
+                originalWidgetPos.set(new Vector2i(widget.getX(), widget.getY()));
+
+            Vector2i absoluteEndPos = originalWidgetPos.get().add(relativeEndPos, new Vector2i());
+
+            widget.setPosition(
+                    easing.get(progress, originalWidgetPos.get().x(), absoluteEndPos.x()),
+                    easing.get(progress, originalWidgetPos.get().y(), absoluteEndPos.y())
             );
 
             if (animation.isFinished())
