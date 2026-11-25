@@ -53,6 +53,20 @@ public interface Action<T extends Number> {
                 widget.setAlpha(easing.get(progress, clampedFrom, clampedTo));
     }
 
+    static Action<Float> createAlpha(@Range(from = 0, to = 1) float to) {
+        float clampedTo = Math.clamp(to, 0, 1);
+        AtomicReference<Float> originalWidgetAlpha = new AtomicReference<>(null);
+
+        return (widget, animation, easing, progress) -> {
+            if (originalWidgetAlpha.get() == null) {
+                float alpha = ((ClickableWidgetAccessor) widget).getAlpha();
+                originalWidgetAlpha.set(Math.clamp(alpha, 0, 1));
+            }
+
+            widget.setAlpha(easing.get(progress, originalWidgetAlpha.get(), clampedTo));
+        };
+    }
+
     static <T extends Number> Action<T> empty() {
         return (widget, animation, easing, progress) -> {};
     }
