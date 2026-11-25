@@ -4,6 +4,8 @@ import com.mojang.datafixers.util.Function4;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Range;
 
+import java.util.List;
+
 /**
  * Contains different easing functions, this is used for smooth movements.
  * <p>
@@ -146,6 +148,18 @@ public interface Easing extends BaseEasing<Double> {
                     : (1 + out.get(2 * x - 1)) / 2
     );
 
+    List<Easing> BUILTIN_EASINGS = List.of(
+            LINEAR,
+            SINE,
+            CUBIC,
+            QUINT,
+            CIRCLE,
+            QUADRATIC,
+            QUARTIC,
+            EXPONENTIAL,
+            BOUNCE
+    );
+
 
     /**
      * {@inheritDoc}
@@ -167,38 +181,31 @@ public interface Easing extends BaseEasing<Double> {
     Double inOut(@Range(from = 0, to = 1) double x);
 
     @Override
-    default Double in(@Range(from = 0, to = 1) double x, Double min, Double max) {
-        if (min == 0)
-            return this.in(x) * Math.max(min, max);
-
-        return this.in(x) * Math.max(min, max) + Math.min(min, max);
-    }
-    @Override
-    default Double out(@Range(from = 0, to = 1) double x, Double min, Double max) {
-        if (min == 0)
-            return this.out(x) * Math.max(min, max);
-
-        return this.out(x) * Math.max(min, max) + Math.min(min, max);
-    }
-    @Override
-    default Double inOut(@Range(from = 0, to = 1) double x, Double min, Double max) {
-        if (min == 0)
-            return this.inOut(x) * Math.max(min, max);
-
-        return this.inOut(x) * Math.max(min, max) + Math.min(min, max);
+    default Double in(@Range(from = 0, to = 1) double x, Double from, Double to) {
+        return calculateInOut(x, from, to, this::in);
     }
 
     @Override
-    default Double in(@Range(from = 0, to = 1) double x, Double max) {
-        return this.in(x, 0.0, max);
+    default Double out(@Range(from = 0, to = 1) double x, Double from, Double to) {
+        return calculateInOut(x, from, to, this::out);
+    }
+
+    @Override
+    default Double inOut(@Range(from = 0, to = 1) double x, Double from, Double to) {
+        return calculateInOut(x, from, to, this::inOut);
+    }
+
+    @Override
+    default Double in(@Range(from = 0, to = 1) double x, Double to) {
+        return this.in(x, 0.0, to);
     }
     @Override
-    default Double out(@Range(from = 0, to = 1) double x, Double max) {
-        return this.out(x, 0.0, max);
+    default Double out(@Range(from = 0, to = 1) double x, Double to) {
+        return this.out(x, 0.0, to);
     }
     @Override
-    default Double inOut(@Range(from = 0, to = 1) double x, Double max) {
-        return this.inOut(x, 0.0, max);
+    default Double inOut(@Range(from = 0, to = 1) double x, Double to) {
+        return this.inOut(x, 0.0, to);
     }
 
     default IntEasing asIntEasing() {
@@ -235,7 +242,7 @@ public interface Easing extends BaseEasing<Double> {
     }
 
     private static Easing of(EasingFunction<Double> function) {
-        return of(function, function ,function);
+        return of(function, function, function);
     }
 
     private static Easing withFunctionsAccess(
@@ -260,5 +267,18 @@ public interface Easing extends BaseEasing<Double> {
                 return inOut.apply(this::in, this::out, this::inOut, BaseEasing.normalizeValue(x));
             }
         };
+    }
+
+    static double calculateInOut(double x, double from, double to, EasingFunction<Double> easingFunction) {
+        if (from == 0)
+            return easingFunction.get(x) * to;
+
+        if (from < to) {
+            double slope = Math.max(from, to) - Math.min(from, to);
+            return easingFunction.get(x) * slope + Math.min(from, to);
+        } else {
+            double slope = Math.min(from, to) - Math.max(from, to);
+            return easingFunction.get(x) * slope + Math.max(from, to);
+        }
     }
 }

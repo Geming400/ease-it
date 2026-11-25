@@ -47,29 +47,29 @@ public class IntEasing extends WrappedEasing<Integer, Double, Easing> {
     }
 
     @Override
-    public Integer in(@Range(from = 0, to = 1) double x, Integer min, Integer max) {
-        return (int) Math.round(this.easing.in(x, min.doubleValue(), max.doubleValue()));
+    public Integer in(@Range(from = 0, to = 1) double x, Integer from, Integer to) {
+        return (int) Math.round(this.easing.in(x, from.doubleValue(), to.doubleValue()));
     }
     @Override
-    public Integer out(@Range(from = 0, to = 1) double x, Integer min, Integer max) {
-        return (int) Math.round(this.easing.out(x, min.doubleValue(), max.doubleValue()));
+    public Integer out(@Range(from = 0, to = 1) double x, Integer from, Integer to) {
+        return (int) Math.round(this.easing.out(x, from.doubleValue(), to.doubleValue()));
     }
     @Override
-    public Integer inOut(@Range(from = 0, to = 1) double x, Integer min, Integer max) {
-        return (int) Math.round(this.easing.inOut(x, min.doubleValue(), max.doubleValue()));
+    public Integer inOut(@Range(from = 0, to = 1) double x, Integer from, Integer to) {
+        return (int) Math.round(this.easing.inOut(x, from.doubleValue(), to.doubleValue()));
     }
 
     @Override
-    public Integer in(@Range(from = 0, to = 1) double x, Integer max) {
-        return this.in(x, 0, max);
+    public Integer in(@Range(from = 0, to = 1) double x, Integer to) {
+        return this.in(x, 0, to);
     }
     @Override
-    public Integer out(@Range(from = 0, to = 1) double x, Integer max) {
-        return this.out(x, 0, max);
+    public Integer out(@Range(from = 0, to = 1) double x, Integer to) {
+        return this.out(x, 0, to);
     }
     @Override
-    public Integer inOut(@Range(from = 0, to = 1) double x, Integer max) {
-        return this.inOut(x, 0, max);
+    public Integer inOut(@Range(from = 0, to = 1) double x, Integer to) {
+        return this.inOut(x, 0, to);
     }
 
 

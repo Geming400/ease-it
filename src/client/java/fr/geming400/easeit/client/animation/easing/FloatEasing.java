@@ -34,29 +34,29 @@ public class FloatEasing extends WrappedEasing<Float, Double, Easing> {
     }
 
     @Override
-    public Float in(@Range(from = 0, to = 1) double x, Float min, Float max) {
-        return easing.in(x, min.doubleValue(), max.doubleValue()).floatValue();
+    public Float in(@Range(from = 0, to = 1) double x, Float from, Float to) {
+        return easing.in(x, from.doubleValue(), to.doubleValue()).floatValue();
     }
     @Override
-    public Float out(@Range(from = 0, to = 1) double x, Float min, Float max) {
-        return easing.out(x, min.doubleValue(), max.doubleValue()).floatValue();
+    public Float out(@Range(from = 0, to = 1) double x, Float from, Float to) {
+        return easing.out(x, from.doubleValue(), to.doubleValue()).floatValue();
     }
     @Override
-    public Float inOut(@Range(from = 0, to = 1) double x, Float min, Float max) {
-        return easing.inOut(x, min.doubleValue(), max.doubleValue()).floatValue();
+    public Float inOut(@Range(from = 0, to = 1) double x, Float from, Float to) {
+        return easing.inOut(x, from.doubleValue(), to.doubleValue()).floatValue();
     }
 
     @Override
-    public Float in(@Range(from = 0, to = 1) double x, Float max) {
-        return this.in(x, 0.0f, max);
+    public Float in(@Range(from = 0, to = 1) double x, Float to) {
+        return this.in(x, 0.0f, to);
     }
     @Override
-    public Float out(@Range(from = 0, to = 1) double x, Float max) {
-        return this.out(x, 0.0f, max);
+    public Float out(@Range(from = 0, to = 1) double x, Float to) {
+        return this.out(x, 0.0f, to);
     }
     @Override
-    public Float inOut(@Range(from = 0, to = 1) double x, Float max) {
-        return this.inOut(x, 0.0f, max);
+    public Float inOut(@Range(from = 0, to = 1) double x, Float to) {
+        return this.inOut(x, 0.0f, to);
     }
 
 
