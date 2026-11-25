@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    modImplementation "com.github.geming400:ease-it:v[VERSION]" // eg: VERSION=1.0.1
+    modImplementation "com.github.geming400.ease-it:ease-it:[VERSION]" // eg: VERSION=1.0.1
 }
 ```
 
