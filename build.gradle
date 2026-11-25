@@ -87,7 +87,7 @@ publishing {
 				}
 			}
 
-			groupId = 'fr.geming400.easeit'
+			groupId = project.group
 			artifactId = 'easeit'
 			version = project.version
 
