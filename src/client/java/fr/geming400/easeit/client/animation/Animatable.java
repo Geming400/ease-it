@@ -5,19 +5,15 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.Widget;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
-import oshi.annotation.concurrent.Immutable;
 
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-// TODO: Allow for multiple animations to play at once
-
 /**
  * An {@link Animatable} {@link Widget} can be "animated" using the {@link Easing} system and {@linkplain Action actions}.
- * To animate a widget use {@link #easeit$addAnimation(Animation)},
- * the other functions are not needed for this task.
+ * To animate a widget use {@link #easeit$addAnimation(Animation)} and its overload, or the {@link #easeit$addAnimations(List)} variant.
+ * <p>
+ * {@linkplain Animatable Animatable} widgets can concurrently play {@linkplain Animation animations}.
  * <p>
  * Example:
  * <code>{@snippet lang=java:
@@ -30,7 +26,7 @@ import java.util.List;
  *             iconWidget,
  *             Easing.EXPONENTIAL,
  *             EasingType.OUT,
- *             Utils.durationToTicks(Duration.ofSeconds(3)),
+ *             20 * 5, // 5 seconds (or 100 ticks)
  *             Action.createResize(50, 50))
  *         );
  *     }
@@ -44,73 +40,49 @@ public interface Animatable {
      * Gets this {@link Widget}'s {@linkplain Animation animations}
      * @return a mutable {@link Deque} containing this {@link Widget}'s {@linkplain Animation animations}
      */
-    default Deque<Animation<?>> easeit$getAnimationsQueue() {
+    default List<Animation<?>> easeit$getAnimations() {
         throw new AssertionError("Implemented in Mixin");
     }
 
     /**
-     * Gets all the animations of this {@link Widget}
-     * @return an immutable list containing all the animations of this {@link Widget}, including the {@linkplain #easeit$getCurrentAnimation() playing one}
+     * Adds multiple {@linkplain Animation animations} onto the {@linkplain #easeit$getAnimations() queue} and plays them if possible
+     * @param animations the {@linkplain Animation animations} to add
+     * @return the added {@linkplain Animation animations}
      */
-    @Immutable
-    default List<Animation<?>> easeit$getAllAnimations() {
-        List<Animation<?>> animations = new ArrayList<>(this.easeit$getAnimationsQueue());
-        if (this.easeit$getCurrentAnimation() != null)
-            animations.add(this.easeit$getCurrentAnimation());
-
-        return List.copyOf(animations);
+    default List<Animation<?>> easeit$addAnimations(List<Animation<?>> animations) {
+        this.easeit$getAnimations().addAll(animations);
+        return animations;
     }
 
     /**
-     * Sets the current playing {@link Animation}. Can be {@code null} to stop the current animation from playing by removing it
-     * @param animation the {@link Animation} to play
-     * @see #easeit$popAnimationQueue()
-     * @see #easeit$addAnimation(Animation)
+     * Adds multiple {@linkplain Animation animations} onto the {@linkplain #easeit$getAnimations() queue} and plays them if possible
+     * @param animations the {@linkplain Animation animations} to add
+     * @return the added {@linkplain Animation animations}
      */
-    default void easeit$setCurrentAnimation(@Nullable Animation<?> animation) {
-        throw new AssertionError("Implemented in Mixin");
+    default List<Animation<?>> easeit$addAnimations(Animation<?>... animations) {
+        List<Animation<?>> asList = List.of(animations);
+
+        this.easeit$getAnimations().addAll(asList);
+        return asList;
     }
 
     /**
-     * Gets the current playing {@link Animation}. Is {@code null} if there's none playing at the moment
-     * @return Gets the current playing {@link Animation}
-     */
-    @Nullable
-    default Animation<?> easeit$getCurrentAnimation() {
-        throw new AssertionError("Implemented in Mixin");
-    }
-
-    /**
-     * Pops the next {@link Animation} from the {@linkplain #easeit$getAnimationsQueue() queue} to play it
-     * @return the {@link Animation} that will get played, or {@code null} if none can be played
-     * @see #easeit$getCurrentAnimation()
-     */
-    @Nullable
-    default Animation<?> easeit$popAnimationQueue() {
-        Animation<?> animation = this.easeit$getAnimationsQueue().pollLast();
-        this.easeit$setCurrentAnimation(animation);
-        return animation;
-    }
-
-    /**
-     * Adds an {@link Animation} onto the {@linkplain #easeit$getAnimationsQueue() queue} and plays it if possible
+     * Adds an {@link Animation} onto the {@linkplain #easeit$getAnimations() queue} and plays it if possible
      * @param animation the {@link Animation} to add
      * @return the added {@link Animation}
+     * @see #easeit$addAnimation(Animation, Animation.AnimationTickCallback)
      */
     default <T extends Number> Animation<T> easeit$addAnimation(Animation<T> animation) {
-        this.easeit$getAnimationsQueue().add(animation);
-        // If there's only the animation we added onto the queue
-        if (this.easeit$getCurrentAnimation() == null)
-            this.easeit$popAnimationQueue();
-
+        this.easeit$getAnimations().add(animation);
         return animation;
     }
 
     /**
-     * Adds an {@link Animation} onto the {@linkplain #easeit$getAnimationsQueue() queue} and plays it if possible
+     * Adds an {@link Animation} onto the {@linkplain #easeit$getAnimations() queue} and plays it if possible
      * @param animation the {@link Animation} to add
      * @param tickCallback the callback to call whenever the given {@link Animation} ticks
      * @return the added {@link Animation}
+     * @see #easeit$addAnimation(Animation)
      */
     default <T extends Number> Animation<T> easeit$addAnimation(Animation<T> animation, Animation.AnimationTickCallback<T> tickCallback) {
         return this.easeit$addAnimation(animation.setCallback(tickCallback));
@@ -119,18 +91,16 @@ public interface Animatable {
 
     /**
      * This is called every time the widget ticks thanks to mixins.
-     * This is used to tick ever {@linkplain Animation animations}
+     * This is used to tick every {@linkplain Animation animations}
+     * @see Animation#tick
      */
     default void easeit$tickWidgetAnimations() {
-        Animation<?> currentAnimation = this.easeit$getCurrentAnimation();
-        if (currentAnimation != null) {
-            currentAnimation.tick();
-
-            // If it's finished then we can move on
-            // To the next animation in queue
-            // What if other longer animations are pushed on the stack ?
-            if (currentAnimation.isFinished())
-                this.easeit$popAnimationQueue();
-        }
+        List<Animation<?>> animations = this.easeit$getAnimations();
+        animations.forEach(Animation::tick);
+        animations.stream()
+                .filter(Animation::isFinished)
+                .forEach(animation ->
+                    this.easeit$getAnimations().remove(animation)
+                );
     }
 }
