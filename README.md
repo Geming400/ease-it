@@ -182,6 +182,11 @@ system property, you can open the "Debug Screen" by pressing the `O` key.
 
 ![Test Screen](readmeResources/debugTestScreen.png)
 
+![Move Test](readmeResources/moveTest.gif)
+![Relative Move Test](readmeResources/relativeMoveTest.gif)
+![Fade Test](readmeResources/alphaTest.gif)
+![Resize Test](readmeResources/scaleTest.gif)
+
 ## Contributing
 
 For setup instructions, please see the [Fabric Documentation page](https://docs.fabricmc.net/develop/getting-started/creating-a-project#setting-up) related to the IDE that you are using.
