@@ -4,7 +4,7 @@
 
 # Waiter, ease it please !
 
-"Waiter, ease it please !" is a very simply library for Minecraft that enables you to
+"Waiter, ease it please !" is a very simply client-only library for Minecraft that enables you to
 apply easing to Minecraft widgets.
 
 ## Downloading
@@ -144,6 +144,43 @@ static Action<Float> myAction() {
 ```
 
 Effectively, **all variables should be final**.
+
+#### Testing actions
+
+To test your actions, you can use the "Debug Screen" this mod provides.
+This screen can be opened by following the instructions in [Preview](#preview).
+
+This screen is represented by the `EaseItTestScreen` class and has an api to allow registering your own tests:
+
+```java
+public class MyModClientInitializer implements ClientModInitializer {
+    @Override
+    public void onInitializeClient() {
+        EaseItTestScreen.registerTest("My Action Test", screen -> {
+            AlphaMultilineTextWidget testWidget = screen.testWidget;
+
+            // ...
+            
+            return testWidget.easeit$addAnimation(Animation.ofInt(
+                    testWidget,
+                    Easing.EXPONENTIAL, EasingType.OUT,
+                    20 * 5,
+                    yourAction
+            ));
+        });
+    }
+}
+```
+
+To set a preview (like in the built-in tests), use the `EaseItTestScreen#startBorder`, `EaseItTestScreen#endBorder`
+and `EaseItTestScreen#showWidgetBorder` fields.
+
+## Preview
+
+To preview what this mod does, when in a **development environment** or by setting the `-DEASE_IT_TEST_SCREEN_ALLOWED=true`
+system property, you can open the "Debug Screen" by pressing the `O` key.
+
+![Test Screen](readmeResources/debugTestScreen.png)
 
 ## Contributing
 
