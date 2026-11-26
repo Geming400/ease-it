@@ -30,7 +30,7 @@ public final class GlobalAnimatable implements SimpleAnimatable {
         return GlobalAnimatable.getInstance().easeit$addAnimation(animation);
     }
 
-    public static List<SimpleAnimation<?>> getAnimations(SimpleAnimation<?> animation) {
+    public static List<SimpleAnimation<?>> getAnimations() {
         return GlobalAnimatable.getInstance().easeit$getAnimations();
     }
 }
