@@ -26,9 +26,6 @@ public interface Action<T extends Number> {
                     easing.get(progress, originalWidgetPos.get().x(), to.x()),
                     easing.get(progress, originalWidgetPos.get().y(), to.y())
             );
-
-            if (animation.isFinished())
-                originalWidgetPos.set(null);
         };
     }
 
@@ -38,15 +35,11 @@ public interface Action<T extends Number> {
             if (originalWidgetPos.get() == null)
                 originalWidgetPos.set(new Vector2i(widget.getX(), widget.getY()));
 
-            Vector2i absoluteEndPos = originalWidgetPos.get().add(relativeEndPos, new Vector2i());
-
+            Vector2ic pos = ActionHelpers.relativeMoveHelper(originalWidgetPos.get(), relativeEndPos, easing, progress);
             widget.setPosition(
-                    easing.get(progress, originalWidgetPos.get().x(), absoluteEndPos.x()),
-                    easing.get(progress, originalWidgetPos.get().y(), absoluteEndPos.y())
+                    pos.x(),
+                    pos.y()
             );
-
-            if (animation.isFinished())
-                originalWidgetPos.set(null);
         };
     }
 
@@ -60,7 +53,10 @@ public interface Action<T extends Number> {
             if (originalWidgetHeight.get() == null)
                 originalWidgetHeight.set(widget.getHeight());
 
-            widget.setDimensions(easing.get(progress, originalWidgetWidth.get(), width), easing.get(progress, originalWidgetHeight.get(), height));
+            widget.setDimensions(
+                    easing.get(progress, originalWidgetWidth.get(), width),
+                    easing.get(progress, originalWidgetHeight.get(), height)
+            );
         };
     }
 

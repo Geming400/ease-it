@@ -6,7 +6,6 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.Widget;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.Deque;
 import java.util.List;
 
 /**
@@ -35,17 +34,9 @@ import java.util.List;
  * This gets injected automatically to {@link ClickableWidget ClickableWidgets} and {@link Screen Screens} using interface injection
  */
 @ApiStatus.NonExtendable
-public interface Animatable<T extends Animation<?>> {
+public non-sealed interface Animatable<T extends Animation<?>> extends BaseAnimatable<T> {
     /**
-     * Gets this {@link Widget}'s {@linkplain Animation animations}
-     * @return a mutable {@link Deque} containing this {@link Widget}'s {@linkplain Animation animations}
-     */
-    default List<T> easeit$getAnimations() {
-        throw new AssertionError("Implemented in Mixin");
-    }
-
-    /**
-     * Adds multiple {@linkplain T animations} onto the {@linkplain #easeit$getAnimations() current animations} and plays them if possible
+     * Adds multiple {@linkplain T animations} onto the {@linkplain #easeit$getAnimations() current animations} and plays them
      * @param animations the {@linkplain T animations} to add
      * @return the added {@linkplain Animation animations}
      */
@@ -55,7 +46,7 @@ public interface Animatable<T extends Animation<?>> {
     }
 
     /**
-     * Adds multiple {@linkplain Animation animations} onto the {@linkplain #easeit$getAnimations() current animations} and plays them if possible
+     * Adds multiple {@linkplain Animation animations} onto the {@linkplain #easeit$getAnimations() current animations} and plays them
      * @param animations the {@linkplain Animation animations} to add
      * @return the added {@linkplain Animation animations}
      */
@@ -67,48 +58,12 @@ public interface Animatable<T extends Animation<?>> {
     }
 
     /**
-     * Adds an {@link WidgetAnimation} onto the {@linkplain #easeit$getAnimations() current animations} and plays it if possible
+     * Adds an {@link WidgetAnimation} onto the {@linkplain #easeit$getAnimations() current animations} and plays it
      * @param animation the {@link WidgetAnimation} to add
      * @return the added {@link WidgetAnimation}
-     * @see #easeit$addAnimation(Animation, Class, Animation.AnimationTickCallback) 
      */
     default <WidgetT extends T> WidgetT easeit$addAnimation(WidgetT animation) {
         this.easeit$getAnimations().add(animation);
         return animation;
-    }
-
-    /**
-     * Adds an {@link WidgetAnimation} onto the {@linkplain #easeit$getAnimations() current animations} and plays it if possible
-     * @param animation the {@link WidgetAnimation} to add
-     * @param numberType the type of the given animation
-     * @param tickCallback the callback to call whenever the given {@link WidgetAnimation} ticks
-     * @return the added {@link WidgetAnimation}
-     * @see #easeit$addAnimation(Animation)
-     */
-    default <WidgetT extends T, N extends Number> WidgetT easeit$addAnimation(WidgetT animation, Class<N> numberType, Animation.AnimationTickCallback<N> tickCallback) {
-        if (!numberType.equals(animation.getNumberType()))
-            throw new IllegalArgumentException("Incompatible animation number type. Expected %s but got %s".formatted(animation.getNumberType(), numberType));
-
-        // noinspection unchecked
-        Animation<N> typedAnimation = (Animation<N>) animation;
-        typedAnimation.setCallback(tickCallback);
-        
-        return this.easeit$addAnimation(animation);
-    }
-
-
-    /**
-     * This is called every time the widget ticks thanks to mixins.
-     * This is used to tick every {@linkplain WidgetAnimation animations}
-     * @see WidgetAnimation#tick
-     */
-    default void easeit$tickWidgetAnimations() {
-        List<T> animations = this.easeit$getAnimations();
-        animations.forEach(Animation::tick);
-        animations.stream()
-                .filter(Animation::isFinished)
-                .forEach(animation ->
-                    this.easeit$getAnimations().remove(animation)
-                );
     }
 }

@@ -2,8 +2,6 @@ package fr.geming400.easeit.client.animation;
 
 import fr.geming400.easeit.client.animation.easing.BaseEasing;
 import fr.geming400.easeit.client.animation.easing.EasingType;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 public interface Animation<T extends Number> {
@@ -32,25 +30,5 @@ public interface Animation<T extends Number> {
 
     EasingType getEasingType();
 
-    AnimationTickCallback<T> getTickCallback();
-
-    Class<T> getNumberType();
-
-    /**
-     * Sets the callback to be executed each time this {@link WidgetAnimation} {@linkplain #tick() ticks}
-     * @param callback the callback
-     */
-    void setCallback(@Nullable AnimationTickCallback<T> callback);
-
     void tick();
-
-
-    interface AnimationTickCallback<T extends Number> {
-        void onTick(
-                WidgetAnimation<T> animation,
-                ClickableWidget widget,
-                BaseEasing.FullEasingFunction<T> easingFunction,
-                @Range(from = 0, to = 1) double progress
-        );
-    }
 }

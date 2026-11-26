@@ -2,6 +2,8 @@ package fr.geming400.easeit.client;
 
 import net.minecraft.util.math.ColorHelper;
 
+import java.time.Duration;
+
 public final class Utils {
     private Utils() {}
 
@@ -19,5 +21,9 @@ public final class Utils {
 
     public static int withFixedAlpha(float alpha, int argb) {
         return withFixedAlpha((int) (alpha * 255), argb);
+    }
+
+    public static int durationToTicks(Duration duration) {
+        return Math.toIntExact(duration.toSeconds() * 20);
     }
 }

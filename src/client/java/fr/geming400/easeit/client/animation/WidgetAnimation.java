@@ -2,10 +2,10 @@ package fr.geming400.easeit.client.animation;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import fr.geming400.easeit.client.Utils;
 import fr.geming400.easeit.client.animation.easing.BaseEasing;
 import fr.geming400.easeit.client.animation.easing.EasingType;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 import java.time.Duration;
@@ -24,17 +24,13 @@ public final class WidgetAnimation<T extends Number> implements Animation<T> {
     private final EasingType easingType;
     private final ClickableWidget widget;
     private final Action<T> action;
-    @Nullable
-    private Animation.AnimationTickCallback<T> callback = null;
-    private final Class<T> numberType;
 
     public WidgetAnimation(
             ClickableWidget widget,
             BaseEasing<T> easing,
             EasingType easingType,
             @Range(from = 0, to = Integer.MAX_VALUE) int duration,
-            Action<T> action,
-            Class<T> numberType
+            Action<T> action
     ) {
         this.duration = duration;
         this.progress = 0;
@@ -42,7 +38,6 @@ public final class WidgetAnimation<T extends Number> implements Animation<T> {
         this.easingType = easingType;
         this.widget = widget;
         this.action = action;
-        this.numberType = numberType;
     }
 
     public WidgetAnimation(
@@ -50,10 +45,9 @@ public final class WidgetAnimation<T extends Number> implements Animation<T> {
             BaseEasing<T> easing,
             EasingType easingType,
             Duration duration,
-            Action<T> action,
-            Class<T> numberType
+            Action<T> action
     ) {
-       this(widget, easing, easingType, durationToTicks(duration), action, numberType);
+       this(widget, easing, easingType, Utils.durationToTicks(duration), action);
     }
 
     @Override
@@ -95,29 +89,12 @@ public final class WidgetAnimation<T extends Number> implements Animation<T> {
         return this.action;
     }
 
-    @Nullable
-    @Override
-    public Animation.AnimationTickCallback<T> getTickCallback() {
-        return this.callback;
-    }
-
-    @Override
-    public Class<T> getNumberType() {
-        return this.numberType;
-    }
-
-    public void setCallback(@Nullable Animation.AnimationTickCallback<T> callback) {
-        this.callback = callback;
-    }
-
     public void tick() {
         if (!this.isFinished()) {
             this.progress += 1;
 
             BaseEasing.FullEasingFunction<T> easingFunction = BaseEasing.FullEasingFunction.of(this.easing, this.easingType);
             this.action.tick(this.widget, this, easingFunction, this.getProgress());
-            if (this.callback != null)
-                this.callback.onTick(this, widget, easingFunction, this.getProgress());
         }
     }
 
@@ -157,8 +134,7 @@ public final class WidgetAnimation<T extends Number> implements Animation<T> {
                 easing.asIntEasing(),
                 easingType,
                 duration,
-                action,
-                Integer.class
+                action
         );
     }
 
@@ -174,8 +150,7 @@ public final class WidgetAnimation<T extends Number> implements Animation<T> {
                 easing.asFloatEasing(),
                 easingType,
                 duration,
-                action,
-                Float.class
+                action
         );
     }
     public static WidgetAnimation<Double> ofDouble(
@@ -190,12 +165,7 @@ public final class WidgetAnimation<T extends Number> implements Animation<T> {
                 easing.asDoubleEasing(),
                 easingType,
                 duration,
-                action,
-                Double.class
+                action
         );
-    }
-
-    private static int durationToTicks(Duration duration) {
-        return Math.toIntExact(duration.toSeconds() * 20);
     }
 }
