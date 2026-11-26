@@ -2,7 +2,7 @@ package fr.geming400.easeit.client.debug;
 
 import fr.geming400.easeit.client.WaiterEaseItPleaseClient;
 import fr.geming400.easeit.client.animation.Action;
-import fr.geming400.easeit.client.animation.Animation;
+import fr.geming400.easeit.client.animation.WidgetAnimation;
 import fr.geming400.easeit.client.animation.easing.Easing;
 import fr.geming400.easeit.client.animation.easing.EasingType;
 import net.minecraft.client.MinecraftClient;
@@ -50,7 +50,7 @@ public class EaseItTestScreen extends Screen {
             screen.startBorder = Border.fromWidget(testWidget, START_BORDER_COLOR, START_BORDER_NAME);
             screen.endBorder = new Border(endPos.x, endPos.y, testWidget.getWidth(), testWidget.getHeight(), END_BORDER_COLOR, END_BORDER_NAME);
 
-            return testWidget.easeit$addAnimation(Animation.ofInt(
+            return testWidget.easeit$addAnimation(WidgetAnimation.ofInt(
                     testWidget,
                     Easing.EXPONENTIAL, EasingType.OUT,
                     20 * 5,
@@ -73,7 +73,7 @@ public class EaseItTestScreen extends Screen {
             screen.startBorder = Border.fromWidget(testWidget, START_BORDER_COLOR, START_BORDER_NAME);
             screen.endBorder = new Border(absoluteEndPos.x, absoluteEndPos.y, testWidget.getWidth(), testWidget.getHeight(), END_BORDER_COLOR, END_BORDER_NAME);
 
-            return testWidget.easeit$addAnimation(Animation.ofInt(
+            return testWidget.easeit$addAnimation(WidgetAnimation.ofInt(
                     testWidget,
                     Easing.EXPONENTIAL, EasingType.OUT,
                     20 * 5,
@@ -90,7 +90,7 @@ public class EaseItTestScreen extends Screen {
             screen.endBorder = Border.fromWidget(testWidget, ColorHelper.Argb.withAlpha((int) (endAlpha * 255), END_BORDER_COLOR), END_BORDER_NAME);
             screen.showWidgetBorder = false;
 
-            return testWidget.easeit$addAnimation(Animation.ofFloat(
+            return testWidget.easeit$addAnimation(WidgetAnimation.ofFloat(
                     testWidget,
                     Easing.EXPONENTIAL, EasingType.OUT,
                     20 * 5,
@@ -107,7 +107,7 @@ public class EaseItTestScreen extends Screen {
             screen.startBorder = Border.fromWidget(testWidget, START_BORDER_COLOR, START_BORDER_NAME);
             screen.endBorder = new Border(testWidget.getX(), testWidget.getY(), endScale.x, endScale.y, END_BORDER_COLOR, END_BORDER_NAME);
 
-            return testWidget.easeit$addAnimation(Animation.ofInt(
+            return testWidget.easeit$addAnimation(WidgetAnimation.ofInt(
                     testWidget,
                     Easing.EXPONENTIAL, EasingType.OUT,
                     20 * 5,
@@ -207,7 +207,7 @@ public class EaseItTestScreen extends Screen {
      *                        It's not cached and the getter is ran every time the button is clicked
      * @return the created {@link TestType}
      */
-    public static <T extends Number> TestType<T> registerTest(String name, Function<EaseItTestScreen, Animation<T>> animationGetter) {
+    public static <T extends Number> TestType<T> registerTest(String name, Function<EaseItTestScreen, WidgetAnimation<T>> animationGetter) {
         TestType<T> test = new TestType<>(name, animationGetter);
         TESTS.add(test);
 
@@ -219,14 +219,14 @@ public class EaseItTestScreen extends Screen {
         private static final int BUTTON_PADDING = 3;
 
         private final String name;
-        private final Function<EaseItTestScreen, Animation<T>> animationGetter;
+        private final Function<EaseItTestScreen, WidgetAnimation<T>> animationGetter;
 
-        private TestType(String name, Function<EaseItTestScreen, Animation<T>> animationGetter) {
+        private TestType(String name, Function<EaseItTestScreen, WidgetAnimation<T>> animationGetter) {
             this.name = name;
             this.animationGetter = animationGetter;
         }
 
-        public Animation<T> getAnimation(EaseItTestScreen screen) {
+        public WidgetAnimation<T> getAnimation(EaseItTestScreen screen) {
             WaiterEaseItPleaseClient.LOGGER.info("Running animation \"{}\" in TestScreen", this.name);
             return this.animationGetter.apply(screen);
         }

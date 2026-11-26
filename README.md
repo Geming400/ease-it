@@ -53,7 +53,7 @@ class MyScreen extends Screen {
         // center of the screen (new Vector2i())
         
         var myWidget = /* ... */;
-        myWidget.easeit$addAnimation(Animation.ofInt(
+        myWidget.easeit$addAnimation(WidgetAnimation.ofInt(
                 myWidget,
                 Easing.BOUNCE, EasingType.IN_OUT,
                 20, // 1 second (20 ticks = 1 second)
@@ -63,16 +63,16 @@ class MyScreen extends Screen {
 }
 ```
 
-You probably noticed the animation static constructor `Animation.ofInt`.
+You probably noticed the animation static constructor `WidgetAnimation.ofInt`.
 There are 3 types of these:
-- `Animation.ofInt`
-- `Animation.ofFloat`
-- `Animation.ofDouble`
+- `WidgetAnimation.ofInt`
+- `WidgetAnimation.ofFloat`
+- `WidgetAnimation.ofDouble`
 
 For example, if you have a position that you want to apply an easing to, and this position
-uses integers, you're going to use `Animation.ofInt`.
+uses integers, you're going to use `WidgetAnimation.ofInt`.
 
-If you need another type for whatever reason, you can call `Animation`'s constructor instead.
+If you need another type for whatever reason, you can call `WidgetAnimation`'s constructor instead.
 
 ---
 

@@ -1,7 +1,7 @@
 package fr.geming400.easeit.client.mixin;
 
 import fr.geming400.easeit.client.animation.Animatable;
-import fr.geming400.easeit.client.animation.Animation;
+import fr.geming400.easeit.client.animation.WidgetAnimation;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.Widget;
@@ -18,9 +18,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * This mixin is used for the interface injection of {@link Animatable}
  */
 @Mixin(ClickableWidget.class)
-abstract class ClickableWidgetMixin implements Widget, Animatable {
+abstract class ClickableWidgetMixin implements Widget, Animatable<WidgetAnimation<?>> {
     @Unique
-    private final List<Animation<?>> playingAnimations = new CopyOnWriteArrayList<>();
+    private final List<WidgetAnimation<?>> playingAnimations = new CopyOnWriteArrayList<>();
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ClickableWidget;renderWidget(Lnet/minecraft/client/gui/DrawContext;IIF)V"), method = "render")
     private void render(DrawContext context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
@@ -28,7 +28,7 @@ abstract class ClickableWidgetMixin implements Widget, Animatable {
     }
 
     @Override
-    public List<Animation<?>> easeit$getAnimations() {
+    public List<WidgetAnimation<?>> easeit$getAnimations() {
         return this.playingAnimations;
     }
 }

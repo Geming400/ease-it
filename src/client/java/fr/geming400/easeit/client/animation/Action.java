@@ -10,7 +10,7 @@ import org.joml.Vector2ic;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Represents an action executable by an {@link Animation}.
+ * Represents an action executable by an {@link WidgetAnimation}.
  * <p>
  * To store states used in actions, use {@linkplain AtomicReference atomic references} <i>(ex: {@link #createMove(Vector2ic)})</i>
  */
@@ -91,14 +91,14 @@ public interface Action<T extends Number> {
     }
 
     /**
-     * Gets called whenever the {@link Animation} ticks
+     * Gets called whenever the {@link WidgetAnimation} ticks
      * @param widget the {@link ClickableWidget} affected by the {@link Action}
-     * @param animation the current {@link Animation}
+     * @param animation the current {@link WidgetAnimation}
      * @param easing the {@link BaseEasing.EasingFunction} used to apply the easing at the given {@code progress}
      * @param progress the "progress" value is in the range {@code [0, 1]} and describes how long has the
      */
-    void tick(ClickableWidget widget, Animation<T> animation, BaseEasing.FullEasingFunction<T> easing, @Range(from = 0, to = 1) double progress);
-    default void tick(Animation<T> animation, BaseEasing.FullEasingFunction<T> easing) {
+    void tick(ClickableWidget widget, WidgetAnimation<T> animation, BaseEasing.FullEasingFunction<T> easing, @Range(from = 0, to = 1) double progress);
+    default void tick(WidgetAnimation<T> animation, BaseEasing.FullEasingFunction<T> easing) {
         this.tick(animation.getWidget(), animation, easing, animation.getProgress());
     }
 }
