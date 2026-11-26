@@ -5,7 +5,6 @@ import net.minecraft.client.gui.widget.Widget;
 import java.util.Deque;
 import java.util.List;
 
-// TODO: Add SimpleAnimatable (no widget)
 public sealed interface BaseAnimatable<T extends Animation<?>> permits Animatable, SimpleAnimatable {
     /**
      * Gets this {@link Widget}'s {@linkplain Animation animations}
