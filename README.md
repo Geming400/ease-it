@@ -36,18 +36,18 @@ And in your `fabric.mod.json`:
 This mod makes every `Screen` and `AbstractWidget` (or `ClickableWidget` in yarn) implement the `Animatable` interface.
 This interface makes you able to add `Animation`s to a given screen or widget.
 
-Each instance of this interface has its **own queue** and **only 1 animation can play at a time**.
-
 ### Adding animations
 
-To add animations, use `easeit$addAnimation`:
+#### In screens
+
+To add animations in a screen, use `easeit$addAnimation` on any `Screen` or `AbstractWidget` (or `ClickableWidget` in yarn) class:
 
 ```java
 class MyScreen extends Screen {
     // ...
     
     protected void init() {
-        // We add an animation to the widget's queue
+        // We add an animation to the widget's animation list
         // with the BOUNCE easing (IN_OUT) -> https://easings.net/#easeInOutBounce
         // that lasts for 1 second and moves to the
         // center of the screen (new Vector2i())
@@ -77,6 +77,24 @@ If you need another type for whatever reason, you can call `WidgetAnimation`'s c
 ---
 
 You can look at the `Easing` class for all the available easing that were implemented.
+
+#### In HUDs
+
+If you want to render dynamic hud elements, you can use `HudAnimation`s:
+
+```java
+GlobalAnimatable.getHud().easeit$addAnimation(HudAnimation.ofInt(
+        Easing.EXPONENTIAL, EasingType.OUT,
+        20 * 5,
+        (drawContext, animation, progress, easingFunction) -> {
+            Vector2ic pos = ActionHelpers.moveHelper(new Vector2i(10, 10), new Vector2i(10, 110), easingFunction, progress);
+            drawContext.drawText(textRenderer, "Hello hi !", pos.x(), pos.y(), 0xFFFFFFFF, true);
+        }
+));
+```
+
+You can use the `ActionHelpers` class to get the results (target position, target size, ...) of the `Action` class.
+Actions don't return anything, they only modify the given widget.
 
 ### Actions
 
