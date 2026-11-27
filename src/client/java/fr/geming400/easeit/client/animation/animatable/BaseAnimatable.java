@@ -1,11 +1,13 @@
-package fr.geming400.easeit.client.animation;
+package fr.geming400.easeit.client.animation.animatable;
 
+import fr.geming400.easeit.client.animation.Animation;
+import fr.geming400.easeit.client.animation.WidgetAnimation;
 import net.minecraft.client.gui.widget.Widget;
 
 import java.util.Deque;
 import java.util.List;
 
-public sealed interface BaseAnimatable<T extends Animation<?>> permits Animatable, SimpleAnimatable {
+public interface BaseAnimatable<T extends Animation<?>> {
     /**
      * Gets this {@link Widget}'s {@linkplain Animation animations}
      * @return a mutable {@link Deque} containing this {@link Widget}'s {@linkplain Animation animations}

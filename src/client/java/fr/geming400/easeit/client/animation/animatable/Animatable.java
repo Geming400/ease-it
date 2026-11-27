@@ -1,5 +1,8 @@
-package fr.geming400.easeit.client.animation;
+package fr.geming400.easeit.client.animation.animatable;
 
+import fr.geming400.easeit.client.animation.Action;
+import fr.geming400.easeit.client.animation.Animation;
+import fr.geming400.easeit.client.animation.WidgetAnimation;
 import fr.geming400.easeit.client.animation.easing.Easing;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -34,7 +37,7 @@ import java.util.List;
  * This gets injected automatically to {@link ClickableWidget ClickableWidgets} and {@link Screen Screens} using interface injection
  */
 @ApiStatus.NonExtendable
-public non-sealed interface Animatable<T extends Animation<?>> extends BaseAnimatable<T> {
+public interface Animatable<T extends Animation<?>> extends BaseAnimatable<T> {
     /**
      * Adds multiple {@linkplain T animations} onto the {@linkplain #easeit$getAnimations() current animations} and plays them
      * @param animations the {@linkplain T animations} to add

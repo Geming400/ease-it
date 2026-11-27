@@ -1,6 +1,6 @@
 package fr.geming400.easeit.client.mixin;
 
-import fr.geming400.easeit.client.animation.Animatable;
+import fr.geming400.easeit.client.animation.animatable.Animatable;
 import fr.geming400.easeit.client.animation.WidgetAnimation;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;

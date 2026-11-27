@@ -3,6 +3,8 @@ package fr.geming400.easeit.client.animation;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import fr.geming400.easeit.client.Utils;
+import fr.geming400.easeit.client.animation.animatable.GlobalAnimatable;
+import fr.geming400.easeit.client.animation.animatable.SimpleAnimatable;
 import fr.geming400.easeit.client.animation.easing.BaseEasing;
 import fr.geming400.easeit.client.animation.easing.EasingType;
 import org.jetbrains.annotations.Range;
@@ -10,7 +12,8 @@ import org.jetbrains.annotations.Range;
 import java.time.Duration;
 
 /**
- * Represents an animation playable by an {@link Animatable} widget, aka <b>any widget</b>
+ * Represents an animation playable by an {@link SimpleAnimatable} to render dynamic HUD elements.
+ * To get a {@link SimpleAnimatable} instance, use {@link GlobalAnimatable#getSimple()}
  */
 public final class SimpleAnimation<T extends Number> implements Animation<T> {
     /// The duration in ticks of this {@link SimpleAnimation}

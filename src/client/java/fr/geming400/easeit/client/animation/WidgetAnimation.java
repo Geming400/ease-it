@@ -3,6 +3,7 @@ package fr.geming400.easeit.client.animation;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import fr.geming400.easeit.client.Utils;
+import fr.geming400.easeit.client.animation.animatable.Animatable;
 import fr.geming400.easeit.client.animation.easing.BaseEasing;
 import fr.geming400.easeit.client.animation.easing.EasingType;
 import net.minecraft.client.gui.widget.ClickableWidget;
